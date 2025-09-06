@@ -39,3 +39,18 @@ export const claimUsername = async (username: string) => {
 	if (!user) return { success: false, error: "No authenticated user found" };
     return{success:true}
 };
+
+export const getCurrentUsername = async()=>{
+    const user = await currentUser()
+    const currentUsername = await db.user.findUnique({
+        where:{
+            clerId:user?.id,
+        },
+        select:{
+            username:true,
+            bio:true,
+        }
+    })
+    return currentUsername
+
+}
