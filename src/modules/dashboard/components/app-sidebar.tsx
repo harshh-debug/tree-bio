@@ -37,11 +37,6 @@ const mainNavItems = [
     url: "/admin/overview",
     icon: BarChart3,
   },
-  {
-    title: "Settings",
-    url: "/admin/settings",
-    icon: Settings,
-  },
 ];
 
 // Tools section
@@ -51,16 +46,7 @@ const toolsItems = [
     url: "/admin/tools/qr-code",
     icon: QrCode,
   },
-  {
-    title: "Link Shortener",
-    url: "/admin/tools/shortener",
-    icon: Link2,
-  },
-  {
-    title: "Analytics",
-    url: "/admin/tools/analytics",
-    icon: TrendingUp,
-  },
+  
 ];
 
 export function AppSidebar() {

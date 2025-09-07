@@ -51,7 +51,7 @@ const handleSubmit = async(e:React.FormEvent)=>{
       if(result.success){
         toast.success("Link Claimed Successfully")
         setLinkValue("")
-        router.push('/admin/myTree')
+        router.push('/admin/my-tree')
       }
     }
   } catch (error) {
