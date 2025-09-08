@@ -6,7 +6,7 @@ import { currentUser } from "@clerk/nextjs/server";
 interface Link {
   id: string;
   title: string;
-  description?: string;
+  description?: string ;
   url: string;
   clickCount: number;
   createdAt: Date;

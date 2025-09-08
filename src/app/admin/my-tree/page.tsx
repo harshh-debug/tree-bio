@@ -31,16 +31,19 @@ const page = async () => {
 				<div className="order-2 lg:order-1 border-r">
 					<LinkForm
 						username={profile?.username!}
-						bio={profile?.bio!}
-						//@ts-expect-error
-						link={links.data!}
-						//@ts-expect-error
-						socialLinks={profile?.socialLinks!}
+						bio={profile?.bio??""}
+						
+						link={(links.data ?? []).map((link: any) => ({
+							...link,
+							description: link.description === null ? "" : link.description,
+						}))}
+						
+						socialLinks={profile?.socialLinks?? []}
 					/>
 				</div>
 				<div className="order-1 lg:order-2 lg:sticky lg:top-6">
 					<PreviewFrame
-						links={previewData.data.map((link: any) => ({
+						links={(previewData.data ?? []).map((link: any) => ({
 							...link,
 							description:
 								link.description === null ? undefined : link.description,

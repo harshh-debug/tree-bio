@@ -92,7 +92,7 @@ interface Profile {
 
 interface SocialLink {
 	id: string;
-	platform: "instagram" | "youtube" | "email" | "github" | "linkedin" | "twitter";
+	platform: string;
 	url: string;
 }
 
@@ -582,7 +582,13 @@ const LinkForm = ({
 				defaultValues={
 					editingSocialLink
 						? {
-								platform: editingSocialLink.platform,
+								platform: editingSocialLink.platform as
+									| "instagram"
+									| "youtube"
+									| "email"
+									| "github"
+									| "linkedin"
+									| "twitter",
 								url: editingSocialLink.url,
 						  }
 						: undefined
