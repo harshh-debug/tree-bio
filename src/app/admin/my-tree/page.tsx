@@ -32,9 +32,9 @@ const page = async () => {
 					<LinkForm
 						username={profile?.username!}
 						bio={profile?.bio!}
-						//@ts-ignore
+						//@ts-expect-error
 						link={links.data!}
-						//@ts-ignore
+						//@ts-expect-error
 						socialLinks={profile?.socialLinks!}
 					/>
 				</div>

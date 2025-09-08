@@ -14,7 +14,7 @@ const profilePage =  async({params}:{params:Promise<{username:string}>}) => {
         console.error("Failed to Log profile visit:",e);
     })
     return (
-        //@ts-ignore
+        //@ts-expect-error
         <TreeBioProfile profileData={profileData} />
     )
 }
