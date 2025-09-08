@@ -303,17 +303,19 @@ const LinkForm = ({
 		setIsSocialModalOpen(true);
 	};
 	const handleDeleteLink = async (linkId: string) => {
-		try {
-			// Delete the link
-			const deletedLink = await deleteLink(linkId);
-			console.log("Deleted Link:", deletedLink);
-			setLinks((prev) => prev.filter((link) => link.id !== linkId));
-			toast.success("Link deleted successfully!");
-		} catch (error) {
-			console.error("Error deleting link:", error);
-			toast.error("Failed to delete link.");
-		}
-	};
+    try {
+        const deletedLink = await deleteLink(linkId);
+        if (deletedLink?.success) {
+            setLinks((prev) => prev.filter((link) => link.id !== linkId));
+            toast.success("Link deleted successfully!");
+        } else {
+            toast.error(deletedLink?.error || "Failed to delete link.");
+        }
+    } catch (error) {
+        console.error("Error deleting link:", error);
+        toast.error("Failed to delete link.");
+    }
+};
 	const handleEditSocialLink = (socialLink: SocialLink) => {
 		setEditingSocialLink(socialLink);
 		setIsSocialModalOpen(true);

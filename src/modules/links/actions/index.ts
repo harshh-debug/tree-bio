@@ -139,9 +139,13 @@ export const deleteLink = async (linkId: string) => {
     const user = await currentUser();
     if (!user) return { success: false, error: "No authenticated user found" };
 
+    // Find the User record by Clerk ID
+    const dbUser = await db.user.findUnique({ where: { clerId: user.id } });
+    if (!dbUser) return { success: false, error: "User not found" };
+
     // Fetch the link to check ownership
     const link = await db.link.findUnique({ where: { id: linkId } });
-    if (!link || link.userId !== user.id) {
+    if (!link || link.userId !== dbUser.id) {
         return { success: false, error: "Link not found or not authorized" };
     }
 
