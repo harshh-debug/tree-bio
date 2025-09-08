@@ -18,6 +18,9 @@ export const metadata: Metadata = {
 	title: "TreeBio - Share Your Links with Style",
 	description:
 		"A modern link management platform to organize and share your favorite links seamlessly.",
+	icons: {
+		icon: "/favicon.ico", // or "/my-custom-favicon.png"
+	},
 };
 
 export default function RootLayout({
@@ -28,9 +31,6 @@ export default function RootLayout({
 	return (
 		<ClerkProvider>
 			<html lang="en" suppressHydrationWarning>
-				<head>
-					<link rel="icon" href="/logo.svg" type="image/png" />
-				</head>
 				<body
 					className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 				>
