@@ -121,9 +121,12 @@ export const getDailyProfileVisits = async (userId: string, days: number = 30) =
         visitedAt: 'desc'
       }
     });
+    interface Visit {
+      visitedAt: Date;
+    }
 
     // Group by date
-    const dailyVisits = visits.reduce((acc, visit) => {
+    const dailyVisits = visits.reduce<Record<string, number>>((acc, visit) => {
       const date = visit.visitedAt.toISOString().split('T')[0];
       acc[date] = (acc[date] || 0) + 1;
       return acc;
