@@ -38,12 +38,12 @@ export const LinkCard: React.FC<LinkCardProps> = ({
 
   return (
     <Card className="group hover:shadow-md transition-all duration-200 border hover:border-purple-200">
-      <CardContent >
-        <div className="flex items-start gap-3">
+      <CardContent className="p-3 sm:p-4">
+        <div className="flex items-start gap-2 sm:gap-3">
           <Button
             variant="ghost"
             size="sm"
-            className="h-6 w-6 p-0 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 mt-1"
+            className="h-6 w-6 p-0 cursor-grab opacity-0 lg:group-hover:opacity-100 md:opacity-100 transition-opacity flex-shrink-0 mt-1"
           >
             <Grip size={14} />
           </Button>
@@ -51,14 +51,14 @@ export const LinkCard: React.FC<LinkCardProps> = ({
           {/* OG Image */}
           <div className="flex-shrink-0">
             {loading ? (
-              <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-lg flex items-center justify-center">
                 <Loader2 size={16} className="animate-spin text-gray-400" />
               </div>
             ) : ogData?.image ? (
               <img
                 src={ogData.image || "/placeholder.svg"}
                 alt={ogData.title || link.title}
-                className="w-16 h-16 object-cover rounded-lg bg-gray-100"
+                className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded-lg bg-gray-100"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = "none";
@@ -70,12 +70,12 @@ export const LinkCard: React.FC<LinkCardProps> = ({
 
             {/* Fallback favicon or icon */}
             {(!ogData?.image || error) && !loading && (
-              <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gray-100 rounded-lg flex items-center justify-center">
                 {ogData?.favicon ? (
                   <img
                     src={ogData.favicon || "/placeholder.svg"}
                     alt="Favicon"
-                    className="w-6 h-6"
+                    className="w-4 h-4 sm:w-6 sm:h-6"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.style.display = "none";
@@ -85,16 +85,16 @@ export const LinkCard: React.FC<LinkCardProps> = ({
                   />
                 ) : null}
                 <Globe
-                  size={20}
-                  className={`text-gray-400 ${ogData?.favicon ? "hidden" : ""}`}
+                  size={16}
+                  className={`text-gray-400 sm:w-5 sm:h-5 ${ogData?.favicon ? "hidden" : ""}`}
                 />
               </div>
             )}
           </div>
 
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <h4 className="font-medium truncate">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <h4 className="font-medium truncate text-sm sm:text-base">
                 {link.title || ogData?.title}
               </h4>
               <Badge variant="secondary" className="text-xs flex-shrink-0">
@@ -104,7 +104,7 @@ export const LinkCard: React.FC<LinkCardProps> = ({
 
             {/* Description from OG data or user input */}
             {(ogData?.description || link.description) && (
-              <p className="text-sm text-muted-foreground line-clamp-2 mb-1">
+              <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 mb-1">
                 {ogData?.description || link.description}
               </p>
             )}
@@ -121,30 +121,31 @@ export const LinkCard: React.FC<LinkCardProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0">
+          {/* Action buttons - always visible on mobile, hover on desktop */}
+          <div className="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex-shrink-0">
             <Button
               variant="ghost"
               size="sm"
-              className="h-8 w-8 p-0"
+              className="h-7 w-7 sm:h-8 sm:w-8 p-0"
               onClick={() => onEdit(link.id)}
             >
-              <Edit3 size={14} />
+              <Edit3 size={12} className="sm:w-3.5 sm:h-3.5" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              className="h-8 w-8 p-0 text-red-500 hover:text-red-600"
+              className="h-7 w-7 sm:h-8 sm:w-8 p-0 text-red-500 hover:text-red-600"
               onClick={() => onDelete(link.id)}
             >
-              <Trash2 size={14} />
+              <Trash2 size={12} className="sm:w-3.5 sm:h-3.5" />
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              className="h-8 w-8 p-0"
+              className="h-7 w-7 sm:h-8 sm:w-8 p-0"
               onClick={() => window.open(link.url, "_blank")}
             >
-              <ExternalLink size={14} />
+              <ExternalLink size={12} className="sm:w-3.5 sm:h-3.5" />
             </Button>
           </div>
         </div>
@@ -203,16 +204,16 @@ export const LinkFormWithPreview: React.FC<LinkFormWithPreviewProps> = ({
 
   return (
     <Card className="border border-gray-200">
-      <CardContent className="p-4">
-        <form onSubmit={handleSubmit} className="space-y-4">
+      <CardContent className="p-3 sm:p-4">
+        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="link-url">URL</Label>
+            <Label htmlFor="link-url" className="text-sm">URL</Label>
             <Input
               id="link-url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="https://..."
-              className="bg-white"
+              className="bg-white text-sm"
               required
             />
           </div>
@@ -220,33 +221,33 @@ export const LinkFormWithPreview: React.FC<LinkFormWithPreviewProps> = ({
           {/* Preview */}
           {url && (
             <div className="border rounded-lg p-3 bg-gray-50">
-              <div className="flex items-start gap-3">
+              <div className="flex items-start gap-2 sm:gap-3">
                 {loading ? (
-                  <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
-                    <Loader2 size={16} className="animate-spin text-gray-400" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
+                    <Loader2 size={14} className="sm:w-4 sm:h-4 animate-spin text-gray-400" />
                   </div>
                 ) : ogData?.image ? (
                   <img
                     src={ogData.image || "/placeholder.svg"}
                     alt="Preview"
-                    className="w-12 h-12 object-cover rounded bg-gray-200"
+                    className="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded bg-gray-200 flex-shrink-0"
                   />
                 ) : (
-                  <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
-                    <Globe size={16} className="text-gray-400" />
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
+                    <Globe size={14} className="sm:w-4 sm:h-4 text-gray-400" />
                   </div>
                 )}
 
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-sm truncate">
+                  <p className="font-medium text-xs sm:text-sm truncate">
                     {ogData?.title || "Loading..."}
                   </p>
                   {ogData?.description && (
-                    <p className="text-xs text-gray-600 line-clamp-2">
+                    <p className="text-xs text-gray-600 line-clamp-2 mt-1">
                       {ogData.description}
                     </p>
                   )}
-                  <p className="text-xs text-gray-500 truncate">
+                  <p className="text-xs text-gray-500 truncate mt-1">
                     {ogData?.siteName || (url ? new URL(url).hostname : "")}
                   </p>
                 </div>
@@ -255,30 +256,34 @@ export const LinkFormWithPreview: React.FC<LinkFormWithPreviewProps> = ({
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="link-title">Link Title</Label>
+            <Label htmlFor="link-title" className="text-sm">Link Title</Label>
             <Input
               id="link-title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Enter link title..."
-              className="bg-white"
+              className="bg-white text-sm"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="link-description">Description (optional)</Label>
+            <Label htmlFor="link-description" className="text-sm">Description (optional)</Label>
             <Input
               id="link-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Brief description..."
-              className="bg-white"
+              className="bg-white text-sm"
             />
           </div>
 
-          <div className="flex gap-2">
-            <Button size="sm" type="submit" className={cn(isPending && "pointer-events-none bg-black/20")} >
+          <div className="flex gap-2 flex-col sm:flex-row">
+            <Button 
+              size="sm" 
+              type="submit" 
+              className={cn("flex-1 sm:flex-none", isPending && "pointer-events-none bg-black/20")}
+            >
               {defaultValues ? "Update Link" : "Add Link"}
             </Button>
             <Button
@@ -286,6 +291,7 @@ export const LinkFormWithPreview: React.FC<LinkFormWithPreviewProps> = ({
               variant="outline"
               type="button"
               onClick={onCancel}
+              className="flex-1 sm:flex-none"
             >
               Cancel
             </Button>

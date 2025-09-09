@@ -42,18 +42,41 @@ export function useOGData(url: string | null): UseOGDataResult {
     setError(null);
 
     const fetchOGData = async () => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 15000);
+
       try {
-        const response = await fetch(`/api/og-data?url=${encodeURIComponent(url)}`);
+        const response = await fetch(`/api/og-data?url=${encodeURIComponent(url)}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          signal: controller.signal,
+        });
+        
+        clearTimeout(timeoutId);
         
         if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Failed to fetch OG data');
+          let errorMessage;
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.error || 'Failed to fetch OG data';
+          } catch {
+            errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+          }
+          throw new Error(errorMessage);
         }
 
         const ogData = await response.json();
         setData(ogData);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
+        clearTimeout(timeoutId);
+        
+        if (err && typeof err === 'object' && 'name' in err && (err as { name: string }).name === 'AbortError') {
+          setError('Request timeout - please try again');
+        } else {
+          setError(err instanceof Error ? err.message : 'An error occurred');
+        }
         setData(null);
       } finally {
         setLoading(false);

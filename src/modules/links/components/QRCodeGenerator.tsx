@@ -124,21 +124,21 @@ const QRCodeGenerator = ({ username }: QRCodeGeneratorProps) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6 px-4 sm:px-0">
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <QrCode className="h-5 w-5" />
+          <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
+            <QrCode className="h-4 w-4 sm:h-5 sm:w-5" />
             Your Profile QR Code
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-sm">
             Generate a QR code that links directly to your public profile
           </CardDescription>
         </CardHeader>
         
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-4 sm:space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="url">Profile URL</Label>
+            <Label htmlFor="url" className="text-sm">Profile URL</Label>
             <div className="flex gap-2">
               <Input
                 id="url"
@@ -153,15 +153,16 @@ const QRCodeGenerator = ({ username }: QRCodeGeneratorProps) => {
                 size="icon"
                 onClick={openProfile}
                 title="Open profile in new tab"
+                className="flex-shrink-0"
               >
                 <ExternalLink className="h-4 w-4" />
               </Button>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="size">Size</Label>
+              <Label htmlFor="size" className="text-sm">Size</Label>
               <Select value={size} onValueChange={setSize}>
                 <SelectTrigger>
                   <SelectValue />
@@ -177,7 +178,7 @@ const QRCodeGenerator = ({ username }: QRCodeGeneratorProps) => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="error-level">Error Correction</Label>
+              <Label htmlFor="error-level" className="text-sm">Error Correction</Label>
               <Select value={errorLevel} onValueChange={setErrorLevel}>
                 <SelectTrigger>
                   <SelectValue />
@@ -204,42 +205,52 @@ const QRCodeGenerator = ({ username }: QRCodeGeneratorProps) => {
 
       {qrCodeUrl && (
         <Card>
-          <CardContent className="pt-6">
+          <CardContent className="pt-4 sm:pt-6">
             <div className="space-y-4">
               <div className="flex justify-center">
-                <div className="p-4 bg-white rounded-lg shadow-sm border">
+                <div className="p-3 sm:p-4 bg-white rounded-lg shadow-sm border">
                   <img
                     src={qrCodeUrl}
                     alt="Generated QR Code"
-                    className="block"
-                    style={{ width: `${size}px`, height: `${size}px` }}
+                    className="block max-w-full h-auto"
+                    style={{ 
+                      width: `${Math.min(parseInt(size), 280)}px`, 
+                      height: `${Math.min(parseInt(size), 280)}px`,
+                      maxWidth: '100%'
+                    }}
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-3 gap-2">
+              {/* Mobile: Stacked buttons, Desktop: 3 columns */}
+              <div className="flex flex-col sm:grid sm:grid-cols-3 gap-2 sm:gap-2">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={downloadQRCode}
+                  className="flex-1 sm:flex-none justify-center h-10 sm:h-10"
                 >
-                  <Download className="h-4 w-4 mr-2" />
+                  <Download className="h-4 w-4 mr-2 flex-shrink-0" />
                   Download
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={copyToClipboard}
+                  className="flex-1 sm:flex-none justify-center h-10 sm:h-10"
                 >
-                  <Copy className="h-4 w-4 mr-2" />
-                  {copySuccess ? 'Copied!' : 'Copy'}
+                  <Copy className="h-4 w-4 mr-2 flex-shrink-0" />
+                  <span className={copySuccess ? 'text-green-600' : ''}>
+                    {copySuccess ? 'Copied!' : 'Copy'}
+                  </span>
                 </Button>
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={shareQRCode}
+                  className="flex-1 sm:flex-none justify-center h-10 sm:h-10"
                 >
-                  <Share2 className="h-4 w-4 mr-2" />
+                  <Share2 className="h-4 w-4 mr-2 flex-shrink-0" />
                   Share
                 </Button>
               </div>
@@ -248,7 +259,7 @@ const QRCodeGenerator = ({ username }: QRCodeGeneratorProps) => {
                 <p className="text-xs text-muted-foreground">
                   QR code links to:
                 </p>
-                <p className="text-sm font-mono bg-muted px-2 py-1 rounded break-all">
+                <p className="text-xs sm:text-sm font-mono bg-muted px-2 py-1 rounded break-all">
                   {url}
                 </p>
               </div>

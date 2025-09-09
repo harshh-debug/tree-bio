@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -303,19 +302,19 @@ const LinkForm = ({
 		setIsSocialModalOpen(true);
 	};
 	const handleDeleteLink = async (linkId: string) => {
-    try {
-        const deletedLink = await deleteLink(linkId);
-        if (deletedLink?.success) {
-            setLinks((prev) => prev.filter((link) => link.id !== linkId));
-            toast.success("Link deleted successfully!");
-        } else {
-            toast.error(deletedLink?.error || "Failed to delete link.");
+        try {
+            const deletedLink = await deleteLink(linkId);
+            if (deletedLink?.success) {
+                setLinks((prev) => prev.filter((link) => link.id !== linkId));
+                toast.success("Link deleted successfully!");
+            } else {
+                toast.error(deletedLink?.error || "Failed to delete link.");
+            }
+        } catch (error) {
+            console.error("Error deleting link:", error);
+            toast.error("Failed to delete link.");
         }
-    } catch (error) {
-        console.error("Error deleting link:", error);
-        toast.error("Failed to delete link.");
-    }
-};
+    };
 	const handleEditSocialLink = (socialLink: SocialLink) => {
 		setEditingSocialLink(socialLink);
 		setIsSocialModalOpen(true);
@@ -344,56 +343,58 @@ const LinkForm = ({
 	};
 
 	return (
-		<div className="w-full max-w-2xl mx-auto space-y-6">
+		<div className="w-full max-w-2xl mx-auto space-y-4 sm:space-y-6 px-4 sm:px-0">
 			{/* Profile Section */}
 			<Card className="border-2 border-dashed border-gray-200 hover:border-green-400 transition-colors">
-				<CardContent className="p-6">
-					<div className="flex items-center gap-4">
-						<div className="relative group">
-							<Avatar className="h-20 w-20 border-4 border-white shadow-lg">
+				<CardContent className="p-4 sm:p-6">
+					<div className="flex items-start sm:items-center gap-3 sm:gap-4">
+						<div className="relative group flex-shrink-0">
+							<Avatar className="h-16 w-16 sm:h-20 sm:w-20 border-4 border-white shadow-lg">
 								<AvatarImage
 									src={profile.imageUrl || "/placeholder.svg"}
 									alt={profile.username}
 								/>
-								<AvatarFallback className="text-lg font-semibold bg-gray-100 text-gray-600">
+								<AvatarFallback className="text-sm sm:text-lg font-semibold bg-gray-100 text-gray-600">
 									{profile.username.slice(0, 2).toUpperCase() || "UN"}
 								</AvatarFallback>
 							</Avatar>
 							<Button
 								size="sm"
 								variant="secondary"
-								className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+								className="absolute -bottom-1 -right-1 sm:-bottom-2 sm:-right-2 h-6 w-6 sm:h-8 sm:w-8 rounded-full p-0 opacity-0 group-hover:opacity-100 transition-opacity"
 							>
-								<Camera size={14} />
+								<Camera size={12} className="sm:w-3.5 sm:h-3.5" />
 							</Button>
 						</div>
 
-						<div className="flex-1 space-y-2">
+						<div className="flex-1 space-y-2 min-w-0">
 							{editingProfile ? (
 								<form
 									onSubmit={profileForm.handleSubmit(onProfileSubmit)}
 									className="space-y-2"
 								>
-									<div className="flex gap-2">
+									<div className="flex gap-2 flex-col sm:flex-row">
 										<Input
 											{...profileForm.register("firstName")}
 											placeholder="First Name"
+											className="text-sm"
 										/>
 										<Input
 											{...profileForm.register("lastName")}
 											placeholder="Last Name"
+											className="text-sm"
 										/>
 									</div>
 									<div>
 										<Input
 											{...profileForm.register("username")}
 											placeholder="Username"
-											className="font-semibold cursor-not-allowed"
+											className="font-semibold cursor-not-allowed text-sm"
 											readOnly
 											disabled
 										/>
 										{profileForm.formState.errors.username && (
-											<p className="text-sm text-red-500 mt-1">
+											<p className="text-xs sm:text-sm text-red-500 mt-1">
 												{profileForm.formState.errors.username.message}
 											</p>
 										)}
@@ -402,20 +403,21 @@ const LinkForm = ({
 										<Textarea
 											{...profileForm.register("bio")}
 											placeholder="Add bio..."
-											className="resize-none"
+											className="resize-none text-sm"
 											rows={2}
 										/>
 										{profileForm.formState.errors.bio && (
-											<p className="text-sm text-red-500 mt-1">
+											<p className="text-xs sm:text-sm text-red-500 mt-1">
 												{profileForm.formState.errors.bio.message}
 											</p>
 										)}
 									</div>
-									<div className="flex gap-2">
+									<div className="flex gap-2 flex-col sm:flex-row">
 										<Button
 											size="sm"
 											type="submit"
 											disabled={profileForm.formState.isSubmitting}
+											className="flex-1 sm:flex-none"
 										>
 											Save
 										</Button>
@@ -424,6 +426,7 @@ const LinkForm = ({
 											variant="outline"
 											type="button"
 											onClick={() => setEditingProfile(false)}
+											className="flex-1 sm:flex-none"
 										>
 											Cancel
 										</Button>
@@ -432,19 +435,19 @@ const LinkForm = ({
 							) : (
 								<div className="space-y-1">
 									<div className="flex items-center gap-2">
-										<h3 className="font-semibold text-lg">
+										<h3 className="font-semibold text-base sm:text-lg truncate">
 											{profile.username || "Add username..."}
 										</h3>
 										<Button
 											size="sm"
 											variant="ghost"
-											className="h-6 w-6 p-0"
+											className="h-6 w-6 p-0 flex-shrink-0"
 											onClick={() => setEditingProfile(true)}
 										>
-											<Edit3 size={12} />
+											<Edit3 size={10} className="sm:w-3 sm:h-3" />
 										</Button>
 									</div>
-									<p className="text-sm text-muted-foreground">
+									<p className="text-xs sm:text-sm text-muted-foreground">
 										{profile.bio || "Add bio..."}
 									</p>
 								</div>
@@ -453,7 +456,7 @@ const LinkForm = ({
 					</div>
 
 					{/* Social Links */}
-					<div className="mt-4 flex gap-2 flex-wrap">
+					<div className="mt-3 sm:mt-4 flex gap-2 flex-wrap">
 						{/* Display existing social links */}
 						{userSocialLinks.map((socialLink) => {
 							const Icon = getSocialIcon(socialLink.platform);
@@ -463,37 +466,37 @@ const LinkForm = ({
 									<Button
 										variant="outline"
 										size="sm"
-										className={`h-9 w-9 p-0 bg-transparent transition-colors ${colorClass}`}
+										className={`h-8 w-8 sm:h-9 sm:w-9 p-0 bg-transparent transition-colors ${colorClass}`}
 										onClick={() => window.open(socialLink.url, "_blank")}
 									>
-										<Icon size={16} />
+										<Icon size={14} className="sm:w-4 sm:h-4" />
 									</Button>
 									
-									{/* Edit and Delete buttons on hover */}
-									<div className="absolute -top-2 -right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+									{/* Edit and Delete buttons - visible on mobile, hover on desktop */}
+									<div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 flex gap-0.5 sm:gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
 										<Button
 											size="sm"
 											variant="secondary"
-											className="h-5 w-5 rounded-full p-0 text-white"
+											className="h-4 w-4 sm:h-5 sm:w-5 rounded-full p-0 text-white bg-blue-500 hover:bg-blue-600"
 											onClick={(e) => {
 												e.stopPropagation();
 												handleEditSocialLink(socialLink);
 											}}
 											title="Edit social link"
 										>
-											<Edit size={8} />
+											<Edit size={6} className="sm:w-2 sm:h-2" />
 										</Button>
 										<Button
 											size="sm"
 											variant="secondary"
-											className="h-5 w-5 rounded-full p-0"
+											className="h-4 w-4 sm:h-5 sm:w-5 rounded-full p-0 bg-red-500 hover:bg-red-600 text-white"
 											onClick={(e) => {
 												e.stopPropagation();
 												handleDeleteSocialLink(socialLink.id);
 											}}
 											title="Delete social link"
 										>
-											<X size={8} />
+											<X size={6} className="sm:w-2 sm:h-2" />
 										</Button>
 									</div>
 								</div>
@@ -504,18 +507,18 @@ const LinkForm = ({
 						<Button
 							variant="outline"
 							size="sm"
-							className="h-9 w-9 p-0 border-dashed bg-transparent hover:border-solid"
+							className="h-8 w-8 sm:h-9 sm:w-9 p-0 border-dashed bg-transparent hover:border-solid"
 							onClick={handleAddSocialLink}
 							title="Add social link"
 						>
-							<Plus size={16} />
+							<Plus size={14} className="sm:w-4 sm:h-4" />
 						</Button>
 					</div>
 				</CardContent>
 			</Card>
 
 			{/* Links Section */}
-			<div className="space-y-3">
+			<div className="space-y-2 sm:space-y-3">
 				{links.map((link, index) => (
 					<LinkCard
 						key={link.id}
@@ -546,32 +549,32 @@ const LinkForm = ({
 				) : (
 					<Button
 						onClick={() => setIsAddingLink(true)}
-						className="w-full h-12 border-2 border-dashed border-gray-300 bg-white hover:bg-gray-50 dark:text-gray-200 text-gray-700 font-medium rounded-lg transition-colors"
+						className="w-full h-10 sm:h-12 border-2 border-dashed border-gray-300 bg-white hover:bg-gray-50 dark:text-gray-200 text-gray-700 font-medium rounded-lg transition-colors text-sm sm:text-base"
 						variant="outline"
 					>
-						<Plus size={20} className="mr-2" />
+						<Plus size={16} className="mr-2 sm:w-5 sm:h-5" />
 						Add Link
 					</Button>
 				)}
 			</div>
 
 			{/* Bottom Actions */}
-			<div className="flex items-center justify-between pt-4 border-t">
+			<div className="flex items-center justify-between pt-3 sm:pt-4 border-t flex-col sm:flex-row gap-2 sm:gap-0">
 				<Button
 					variant="outline"
 					onClick={() => toast.success("Feature coming soon!")}
-					className="flex items-center gap-2 bg-transparent cursor-pointer"
+					className="flex items-center gap-2 bg-transparent cursor-pointer text-sm w-full sm:w-auto"
 				>
-					<FolderPlus size={16} />
+					<FolderPlus size={14} className="sm:w-4 sm:h-4" />
 					Add Collection
 				</Button>
 
 				<Button
 					variant="outline"
-					className="flex items-center gap-2 bg-transparent cursor-pointer"
+					className="flex items-center gap-2 bg-transparent cursor-pointer text-sm w-full sm:w-auto"
 					onClick={() => toast.success("Feature coming soon!")}
 				>
-					<Archive size={16} />
+					<Archive size={14} className="sm:w-4 sm:h-4" />
 					View Archive
 				</Button>
 			</div>
